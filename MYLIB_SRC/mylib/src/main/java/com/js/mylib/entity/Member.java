@@ -10,6 +10,7 @@ import java.util.List;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @ToString(of = {"id", "name", "email", "password", "message", "accumulateTimeMonth", "accumulateTimeDay", "accumulateTimeYear", "type"})
+@Table(name = "member_tb")
 public class Member {
 	@Id @GeneratedValue
 	@Column(name = "member_id")
