@@ -11,6 +11,7 @@ import java.util.List;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @ToString(of = {"id", "name", "readerId", "description", "startTime", "endTime", "limit"})
+@Table(name = "library_tb")
 public class Library {
 	@Id @GeneratedValue
 	@Column(name = "library_id")
@@ -28,15 +29,15 @@ public class Library {
 	@OneToMany(mappedBy = "library")
 	private List<Member> members = new ArrayList<>();
 
-	private int limit;
+	private int memberLimit;
 
-	public Library(String name, String description, Long readerId, LocalDateTime startTime, LocalDateTime endTime, int limit) {
+	public Library(String name, String description, Long readerId, LocalDateTime startTime, LocalDateTime endTime, int memberLimit) {
 		this.name = name;
 		this.readerId = readerId;
 		this.description = description;
 		this.startTime = startTime;
 		this.endTime = endTime;
-		this.limit = limit;
+		this.memberLimit = memberLimit;
 	}
 
 
