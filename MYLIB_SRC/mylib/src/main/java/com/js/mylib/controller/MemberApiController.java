@@ -57,6 +57,12 @@ public class MemberApiController {
 		return new MemberResponse(-1l);
 	}
 
+	@PostMapping("/api/v1/members/enter/library/{libraryId}/member/{memberId}")
+	public MemberResponse enterLibrary(@PathVariable Long libraryId, @PathVariable Long memberId) {
+		Long id = memberService.enterLibrary(libraryId, memberId);
+		return new MemberResponse(id);
+	}
+
 	@Data
 	static class MemberResponse {
 		private Long id;
