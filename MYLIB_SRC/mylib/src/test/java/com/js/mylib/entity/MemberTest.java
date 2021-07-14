@@ -25,7 +25,7 @@ class MemberTest {
 		em.persist(member1);
 		em.persist(member2);
 
-		Library library1 = new Library("도서관1", "수능까지 화이팅!!", LocalDateTime.now(), LocalDateTime.of(2021,12,30,00,00), 20);
+		Library library1 = new Library("도서관1", "수능까지 화이팅!!", member1.getId(),LocalDateTime.now(), LocalDateTime.of(2021,12,30,00,00), 20);
 		em.persist(library1);
 
 		member1.setLibrary(library1);
