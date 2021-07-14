@@ -20,7 +20,7 @@ class MemberTest {
 	@Test
 	public void testEntity() {
 		Member member1 = new Member("kang","abcd@naver.com", "1234",  MemberType.STUDENT);
-		Member member2 = new Member("kim","abcde@naver.com", "1234", MemberType.STUDENT);
+		Member member2 = new Member("kim","abcde@naver.com", "1234", MemberType.JOB_SEEKER);
 
 		em.persist(member1);
 		em.persist(member2);

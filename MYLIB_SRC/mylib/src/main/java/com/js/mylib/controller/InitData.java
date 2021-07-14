@@ -37,19 +37,28 @@ public class InitData {
 			em.persist(member0);
 			em.persist(member1);
 
-//			Library library0 = new Library("도서관0", "수능까지 화이팅!!", member0.getId(), LocalDateTime.now(), LocalDateTime.of(2021,12,30,00,00), 20);
-//			em.persist(library0);
-//			member0.setLibrary(library0);
-//			em.persist(member0);
+			Library library0 = new Library("도서관0", "수능까지 화이팅!!", member0.getId(), LocalDateTime.now(), LocalDateTime.of(2021,12,30,00,00), 20);
+			em.persist(library0);
+			member0.setLibrary(library0);
+			em.persist(member0);
+
+			em.flush();
+			em.clear();
 //
 //			Library library1 = new Library("도서관1", "수능까지 화이팅!!", member1.getId(), LocalDateTime.now(), LocalDateTime.of(2021,12,30,00,00), 20);
 //			em.persist(library1);
 //			member1.setLibrary(library1);
 //			em.persist(member1);
 
-			for(int i = 2; i<100; i++) {
-				em.persist(new Member("member"+i,i+"abcd@naver.com", "1234",  MemberType.STUDENT));
+			for(int i = 2; i<100; i= i+2) {
+				em.persist(new Member("member"+i,i+"abcd@naver.com", "1234",  MemberType.STUDENT, library0) );
 			}
+			for(int i = 3; i<100; i= i+2) {
+				em.persist(new Member("member"+i,i+"abcd@naver.com", "1234",  MemberType.STUDENT, null) );
+			}
+
+			em.flush();
+			em.clear();
 		}
 	}
 }
