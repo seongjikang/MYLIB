@@ -1,6 +1,7 @@
 package com.js.mylib.repository;
 
 import com.js.mylib.dto.UpdateMemberRequestDto;
+import com.js.mylib.entity.Library;
 import com.js.mylib.entity.Member;
 import com.js.mylib.entity.MemberType;
 import com.js.mylib.entity.QMember;
@@ -17,7 +18,8 @@ import static com.js.mylib.entity.QMember.*;
 public class MemberJPARepository {
 	private final EntityManager em;
 	private final JPAQueryFactory queryFactory;
-
+	private final LibraryRepository libraryRepository;
+	private final MemberRepository memberRepository;
 	public void saveMember(Member member) {
 		em.persist(member);
 
@@ -37,13 +39,27 @@ public class MemberJPARepository {
 				.set(member.type, type)
 				.execute();
 
-		em.clear();
 		em.flush();
+		em.clear();
+
 
 		if(execute > 0) {
 			return memberId;
 		}
 
 		return -1l;
+	}
+
+	public Long enterLibrary(Long libraryId, Long memberId) {
+		Library library = libraryRepository.findLibraryById(libraryId);
+		Member findMember = memberRepository.findMemberById(memberId);
+
+		findMember.setLibrary(library);
+
+		em.flush();
+		em.clear();
+
+
+		return findMember.getId();
 	}
 }

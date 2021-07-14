@@ -11,6 +11,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -26,8 +27,9 @@ public class MemberService {
 	}
 
 	public List<MemberInfoDto> findMemberByMemberId(Long memberId) {
-		List<Member> member = memberRepository.findMemberById(memberId);
-		List<MemberInfoDto> result = member.stream()
+		List<Member> members= new ArrayList<>();
+				members.add(memberRepository.findMemberById(memberId));
+		List<MemberInfoDto> result = members.stream()
 				.map(m -> new MemberInfoDto(m))
 				.collect(Collectors.toList());
 
@@ -76,6 +78,11 @@ public class MemberService {
 
 		memberJPARepository.updateMember(memberId, request, memberType);
 		return memberId;
+
+	}
+
+	public Long enterLibrary(Long libraryId, Long memberId) {
+		return memberJPARepository.enterLibrary(libraryId, memberId);
 
 	}
 }
