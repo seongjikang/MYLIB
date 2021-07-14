@@ -9,7 +9,7 @@ import java.util.List;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@ToString(of = {"id", "userName", "birth", "sex", "memberType"})
+@ToString(of = {"id", "name", "email", "password", "message", "accumulateTimeMonth", "accumulateTimeDay", "accumulateTimeYear", "type"})
 public class Member {
 	@Id @GeneratedValue
 	@Column(name = "member_id")
@@ -20,6 +20,7 @@ public class Member {
 	private String email;
 	private String password;
 
+	private String message;
 
 	private int accumulateTimeMonth;
 	private int accumulateTimeDay;
@@ -37,6 +38,7 @@ public class Member {
 		this.email = email;
 		this.password= password;
 		this.type = type;
+		this.message = "";
 		this.accumulateTimeDay = 0;
 		this.accumulateTimeMonth = 0;
 		this.accumulateTimeYear = 0;
