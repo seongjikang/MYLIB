@@ -24,7 +24,7 @@ public class LibraryInfoDto {
     private long dDay;
 
     @QueryProjection
-    public LibraryInfoDto(Long libraryId, String libraryName, Long readerId, String readerName, String description, LocalDateTime startTime, LocalDateTime endTime, long dDay) {
+    public LibraryInfoDto(Long libraryId, String libraryName, Long readerId, String readerName, String description, LocalDateTime startTime, LocalDateTime endTime) {
         this.libraryId = libraryId;
         this.libraryName = libraryName;
         this.readerId = readerId;
@@ -32,7 +32,7 @@ public class LibraryInfoDto {
         this.description = description;
         this.startTime = startTime;
         this.endTime = endTime;
-        this.dDay = dDay;
+        this.dDay = ChronoUnit.DAYS.between(startTime, endTime);
     }
 
     public LibraryInfoDto(Library library, Member member) {

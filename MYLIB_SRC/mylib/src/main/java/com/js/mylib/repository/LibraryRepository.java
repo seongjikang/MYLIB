@@ -6,6 +6,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
 
-public interface LibraryRepository extends JpaRepository<Library, Long> {
+public interface LibraryRepository extends JpaRepository<Library, Long>, LibraryRepositoryCustom {
 	Library findLibraryById(Long id);
 }

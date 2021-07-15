@@ -29,7 +29,7 @@ public class MemberApiController {
 	}
 
 	@GetMapping("/api/v1/members/find/{memberId}")
-	public List<MemberInfoDto> findMemberByMemberId(@PathVariable Long memberId) {
+	public MemberInfoDto findMemberByMemberId(@PathVariable Long memberId) {
 		return memberService.findMemberByMemberId(memberId);
 	}
 
@@ -46,15 +46,9 @@ public class MemberApiController {
 
 	@DeleteMapping("/api/v1/members/exit/library/{libraryId}/member/{memberId}")
 	public MemberResponse exitLibrary(@PathVariable Long libraryId, @PathVariable Long memberId) {
-		List<MemberInfoDto> libraryMember = findLibraryMemberByLibraryId(libraryId);
-		for(MemberInfoDto m : libraryMember) {
-			if(m.getMemberId() == memberId) {
-				memberService.deleteMember(memberId);
-				return new MemberResponse(memberId);
-			}
-		}
+		Long id = memberService.exitLibrary(memberId, libraryId);
 
-		return new MemberResponse(-1l);
+		return new MemberResponse(id);
 	}
 
 	@PostMapping("/api/v1/members/enter/library/{libraryId}/member/{memberId}")
