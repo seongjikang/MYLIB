@@ -39,8 +39,10 @@ public class InitData {
 
 			Library library0 = new Library("도서관0", "수능까지 화이팅!!", member0.getId(), LocalDateTime.now(), LocalDateTime.of(2021,12,30,00,00), 20);
 			em.persist(library0);
+
 			member0.setLibrary(library0);
 			em.persist(member0);
+
 
 			em.flush();
 			em.clear();
@@ -54,7 +56,15 @@ public class InitData {
 				em.persist(new Member("member"+i,i+"abcd@naver.com", "1234",  MemberType.STUDENT, library0) );
 			}
 			for(int i = 3; i<100; i= i+2) {
-				em.persist(new Member("member"+i,i+"abcd@naver.com", "1234",  MemberType.STUDENT, null) );
+				Member member =new Member("member"+i,i+"abcd@naver.com", "1234",  MemberType.STUDENT, null);
+				em.persist(member);
+
+				Library library = new Library("도서관"+i, "수능까지 화이팅!!", member.getId(), LocalDateTime.now(), LocalDateTime.of(2021,12,30,00,00), 20);
+				em.persist(library);
+
+				member.setLibrary(library);
+				em.persist(member);
+
 			}
 
 			em.flush();

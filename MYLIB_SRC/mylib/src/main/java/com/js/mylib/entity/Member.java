@@ -17,7 +17,7 @@ import java.util.List;
 @ToString(of = {"id", "name", "email", "password", "message", "accumulateTimeMonth", "accumulateTimeDay", "accumulateTimeYear", "type"})
 @Table(name = "member_tb")
 public class Member {
-	@Id @GeneratedValue
+	@Id @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "LIB_SEQ")
 	@Column(name = "member_id")
 	private Long id;
 	private String name;

@@ -13,7 +13,7 @@ import java.util.List;
 @ToString(of = {"id", "name", "readerId", "description", "startTime", "endTime", "limit"})
 @Table(name = "library_tb")
 public class Library {
-	@Id @GeneratedValue
+	@Id @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "MEM_SEQ")
 	@Column(name = "library_id")
 	private Long id;
 
@@ -26,7 +26,7 @@ public class Library {
 	private LocalDateTime startTime;
 	private LocalDateTime endTime;
 
-	@OneToMany(mappedBy = "library")
+	@OneToMany(mappedBy = "library", cascade = {CascadeType.ALL})
 	private List<Member> members = new ArrayList<>();
 
 	private int memberLimit;
@@ -40,5 +40,17 @@ public class Library {
 		this.memberLimit = memberLimit;
 	}
 
+	public void setReaderId(Long readerId) {
+		this.readerId = readerId;
+	}
 
+	public void removeLibraryMember(Long memberId) {
+		List<Member> temp = getMembers();
+		for(int i=0; i<getMembers().size(); i++) {
+			if(memberId == getMembers().get(i).getId()) {
+				getMembers().remove(i);
+			}
+		}
+		this.members =temp;
+	}
 }

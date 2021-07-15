@@ -3,6 +3,7 @@ package com.js.mylib.dto;
 import lombok.Data;
 
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 
 @Data
 public class CreateLibraryRequestDto {
@@ -16,7 +17,7 @@ public class CreateLibraryRequestDto {
     @NotEmpty(message = "endTime is required value")
     private String endTime;
 
-    @NotEmpty(message = "memberLimit is required value")
+    @NotNull(message = "memberLimit is required value")
     private int memberLimit;
 
 }

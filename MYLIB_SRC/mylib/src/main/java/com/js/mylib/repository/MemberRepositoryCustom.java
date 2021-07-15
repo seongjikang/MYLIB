@@ -7,5 +7,6 @@ import java.util.List;
 public interface MemberRepositoryCustom {
 
 	List<MemberInfoDto> findAllMember();
+	MemberInfoDto findMemberInfoById(Long memberId);
 	void deleteMember(Long memberId);
 }

@@ -35,6 +35,24 @@ public class MemberRepositoryImpl implements MemberRepositoryCustom {
 	}
 
 	@Override
+	public MemberInfoDto findMemberInfoById(Long memberId) {
+		return queryFactory
+				.select(new QMemberInfoDto(
+						member.id.as("memberId"),
+						member.name.as("memberName"),
+						member.email,
+						member.accumulateTimeMonth,
+						member.accumulateTimeDay,
+						member.accumulateTimeYear,
+						member.type,
+						member.message
+				))
+				.from(member)
+				.where(member.id.eq(memberId))
+				.fetchOne();
+	}
+
+	@Override
 	public void deleteMember(Long memberId) {
 		queryFactory
 				.delete(member)
