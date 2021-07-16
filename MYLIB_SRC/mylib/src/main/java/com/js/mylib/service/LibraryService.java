@@ -1,15 +1,10 @@
 package com.js.mylib.service;
 
-import com.js.mylib.dto.CreateLibraryRequestDto;
-import com.js.mylib.dto.LibraryInfoDto;
-import com.js.mylib.dto.LibrarySearchConditionDto;
-import com.js.mylib.dto.MemberInfoDto;
+import com.js.mylib.dto.*;
 import com.js.mylib.entity.Library;
 import com.js.mylib.entity.Member;
-import com.js.mylib.repository.LibraryJPARepository;
+import com.js.mylib.repository.CustomQueryRepository;
 import com.js.mylib.repository.LibraryRepository;
-import com.js.mylib.repository.MemberJPARepository;
-import com.js.mylib.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -19,6 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional(readOnly = true)
@@ -26,10 +22,18 @@ import java.util.List;
 public class LibraryService {
 
 	private final LibraryRepository libraryRepository;
-	private final LibraryJPARepository libraryJPARepository;
+	private final CustomQueryRepository queryRepository;
 
 	public LibraryInfoDto findLibraryInfoById(Long libraryId) {
 		return libraryRepository.findLibraryInfoById(libraryId);
+	}
+
+	public List<MemberInfoDto> findLibraryMemberByLibraryId(Long libraryId) {
+		List<Member> LibraryMembers = findLibraryById(libraryId).getMembers();
+		List<MemberInfoDto> result = LibraryMembers.stream()
+				.map(m -> new MemberInfoDto(m))
+				.collect(Collectors.toList());
+		return result;
 	}
 
 	public Library findLibraryById(Long libraryId) {
@@ -43,7 +47,7 @@ public class LibraryService {
 									LocalDateTime.parse(request.getStartTime(), DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")),
 									LocalDateTime.parse(request.getEndTime(), DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")),
 									request.getMemberLimit());
-		return libraryJPARepository.createLibrary(memberId, library);
+		return queryRepository.createLibrary(memberId, library);
 	}
 
 	public Page<LibraryInfoDto> searchLibraries(LibrarySearchConditionDto libraryCondition, Pageable pageable) {
@@ -51,17 +55,62 @@ public class LibraryService {
 	}
 
 	@Transactional
-	public void deleteLibrary(Long libraryId) {
+	public void deleteLibrary(Long memberId, Long libraryId) {
+		exitCurrentLibrary(memberId,libraryId);
 		libraryRepository.deleteById(libraryId);
 	}
 
 	@Transactional
-	public void exitLibrary(Long memberId, Long libraryId) {
-		libraryJPARepository.exitLibrary( memberId, libraryId);
+	public void exitCurrentLibrary(Long memberId, Long libraryId) {
+		queryRepository.exitLibrary( memberId, libraryId);
 	}
 
 	@Transactional
 	public void changeReader(Long memberId, Long libraryId) {
-		libraryJPARepository.changeReader(memberId, libraryId);
+		queryRepository.changeReader(memberId, libraryId);
+	}
+
+	public Long enterLibrary(Long libraryId, Long memberId) {
+		return queryRepository.enterLibrary(libraryId, memberId);
+
+	}
+
+	@Transactional
+	public Long exitLibrary(Long memberId, Long libraryId) {
+
+		LibraryInfoDto libraryInfo = findLibraryInfoById(libraryId);
+		List<MemberInfoDto> libraryMember = findLibraryMemberByLibraryId(libraryId);
+
+		if(libraryInfo == null) return -1l;
+		boolean isExistMember = false;
+		for(int i =0; i<libraryMember.size(); i++) {
+			if(libraryMember.get(i).getMemberId() == memberId ) {
+				isExistMember = true;
+			}
+		}
+
+		if(!isExistMember) return -1l;
+
+		// 남은 회원이 한명일 때는 삭제 도서관 삭제
+		if(libraryMember.size() == 1) {
+			if(memberId == libraryInfo.getReaderId()) {
+				System.out.println("여기와야함");
+				deleteLibrary(memberId,libraryId);
+			}
+		} else { //회원이 여러명인데 리더가 아니면
+			//리더가 아니면
+			if(memberId != libraryInfo.getReaderId()) {
+				exitCurrentLibrary( memberId, libraryId);
+			} else { //리더라면 나가면서 리더 교체
+				changeReader(memberId, libraryId);
+			}
+		}
+
+		return libraryId;
+	}
+
+	public Long updateLibrary(Long libraryId, Long memberId, UpdateLibraryRequestDto updateLibraryRequest) {
+		queryRepository.updateLibrary(libraryId, memberId, updateLibraryRequest);
+		return libraryId;
 	}
 }
