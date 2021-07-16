@@ -25,8 +25,6 @@ class MemberServiceTest {
 	@Autowired
 	EntityManager em;
 
-	@Autowired MemberService memberService;
-
 	@Autowired LibraryService libraryService;
 
 	JPAQueryFactory queryFactory;
@@ -53,7 +51,7 @@ class MemberServiceTest {
 		assertThat(library0.getId()).isEqualTo(findLibrary.getLibraryId());
 		assertThat(library0.getMembers().size()).isEqualTo(1);
 
-		memberService.exitLibrary(member0.getId(), library0.getId());
+		libraryService.exitLibrary(member0.getId(), library0.getId());
 
 		LibraryInfoDto removeLibrary = libraryService.findLibraryInfoById(library0.getId());
 		assertThat(removeLibrary).isEqualTo(null);
@@ -83,7 +81,7 @@ class MemberServiceTest {
 		assertThat(library0.getMembers().size()).isEqualTo(2);
 		assertThat(library0.getReaderId()).isEqualTo(member0.getId());
 
-		memberService.exitLibrary(member1.getId(), library0.getId());
+		libraryService.exitLibrary(member1.getId(), library0.getId());
 
 		Library result = libraryService.findLibraryById(library0.getId());
 		assertThat(result.getMembers().size()).isEqualTo(1);
@@ -113,7 +111,7 @@ class MemberServiceTest {
 		assertThat(library0.getMembers().size()).isEqualTo(2);
 		assertThat(library0.getReaderId()).isEqualTo(member0.getId());
 
-		memberService.exitLibrary(member0.getId(), library0.getId());
+		libraryService.exitLibrary(member0.getId(), library0.getId());
 
 		Library result = libraryService.findLibraryById(library0.getId());
 		assertThat(result.getMembers().size()).isEqualTo(1);

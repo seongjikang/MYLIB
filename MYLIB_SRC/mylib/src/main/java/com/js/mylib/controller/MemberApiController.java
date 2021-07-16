@@ -33,27 +33,9 @@ public class MemberApiController {
 		return memberService.findMemberByMemberId(memberId);
 	}
 
-	@GetMapping("/api/v1/members/find/library/member/{libraryId}")
-	public List<MemberInfoDto> findLibraryMemberByLibraryId(@PathVariable Long libraryId) {
-		return memberService.findLibraryMemberByLibraryId(libraryId);
-	}
-
 	@PutMapping("/api/v1/members/update/{memberId}")
 	public MemberResponse updateMember(@PathVariable Long memberId, @RequestBody @Valid UpdateMemberRequestDto request) {
 		Long id= memberService.updateMember(memberId, request);
-		return new MemberResponse(id);
-	}
-
-	@DeleteMapping("/api/v1/members/exit/library/{libraryId}/member/{memberId}")
-	public MemberResponse exitLibrary(@PathVariable Long libraryId, @PathVariable Long memberId) {
-		Long id = memberService.exitLibrary(memberId, libraryId);
-
-		return new MemberResponse(id);
-	}
-
-	@PostMapping("/api/v1/members/enter/library/{libraryId}/member/{memberId}")
-	public MemberResponse enterLibrary(@PathVariable Long libraryId, @PathVariable Long memberId) {
-		Long id = memberService.enterLibrary(libraryId, memberId);
 		return new MemberResponse(id);
 	}
 
